@@ -81,13 +81,27 @@ export class Rifle extends Entity {
     }
 
     public getBulletSourcePosition(): Vector3 {
-        const up = this.rifleEntity.globalUp().scale(0.01);
-        const forward = this.rifleEntity.globalForward().scale(0.32);
-        return this.rifleEntity.getGlobalPosition().add(forward.add(up));
+        const forwardOffset = 0.32;
+
+        if (this.state == RifleState.Aimming) {
+            const up = Vector3.Up().rotate(Camera.instance.rotation).scale(-0.01);
+            const forward = Vector3.Forward().rotate(Camera.instance.rotation).scale(forwardOffset);
+            return Camera.instance.position.add(forward);
+        }
+        else {
+            const up = this.rifleEntity.globalUp().scale(0.01);
+            const forward = this.rifleEntity.globalForward().scale(forwardOffset);
+            return this.rifleEntity.getGlobalPosition().add(forward.add(up));
+        }
     }
 
     public getAimDirection(): Vector3 {
-        return this.rifleEntity.globalForward();
+        if (this.state == RifleState.Aimming) {
+            return Vector3.Forward().rotate(Camera.instance.rotation);
+        }
+        else {
+            return this.rifleEntity.globalForward();
+        }
     }
 }
 

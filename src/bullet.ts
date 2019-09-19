@@ -1,12 +1,16 @@
 import utils from "../node_modules/decentraland-ecs-utils/index"
 
-const BULLET_SPEED: number = 5;
+const BULLET_SPEED: number = 10;
 const BULLET_GLTF = new GLTFShape("models/laserbullet.glb");
 
 export class BulletManager {
     private pool: Bullet[] = []
 
     private static _instance: BulletManager = null;
+
+    public static create() {
+        BulletManager.instance;
+    }
 
     public static get instance(): BulletManager {
         if (this._instance == null) this._instance = new BulletManager();

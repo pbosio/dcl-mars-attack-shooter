@@ -1,5 +1,6 @@
 import { Rifle } from "./rifle";
 import { BulletManager } from "./bullet";
+import { ShootEffectManager } from "./shooteffect";
 
 export class Player extends Entity implements ISystem {
 
@@ -29,7 +30,10 @@ export class Player extends Entity implements ISystem {
         });
         Input.instance.subscribe("BUTTON_DOWN", ActionButton.POINTER, false, () => {
             if (this.canShoot()) {
-                BulletManager.instance.shoot(this.rifle.getBulletSourcePosition(), this.rifle.getAimDirection())
+                const shootSource = this.rifle.getBulletSourcePosition();
+                const shootDirection = this.rifle.getAimDirection();
+                BulletManager.instance.shoot(shootSource, shootDirection);
+                ShootEffectManager.instance.showEffect(shootSource, shootDirection);
             }
         });
     }

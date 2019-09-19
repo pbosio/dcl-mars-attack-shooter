@@ -3,14 +3,21 @@
     "title": "interactive-text",
     "favicon": "favicon_asset"
   },
+  "owner": "",
   "contact": {
     "name": "author-name",
     "email": ""
   },
-  "owner": "",
+  "main": "bin/game.js",
+  "tags": [],
   "scene": {
     "parcels": [
-      "0,0"
+      "0,0",
+      "0,1",
+      "0,2",
+      "1,0",
+      "1,1",
+      "1,2"
     ],
     "base": "0,0"
   },
@@ -25,6 +32,8 @@
     "blacklist": [],
     "teleportPosition": ""
   },
-  "main": "bin/game.js",
-  "tags": []
+  "source": {
+    "origin": "builder",
+    "projectId": "b60d3f1b-bbe5-4276-8afe-1fe97479edc6"
+  }
 }
