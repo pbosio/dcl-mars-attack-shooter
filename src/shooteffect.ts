@@ -68,7 +68,10 @@ class ShootEffect extends Entity {
     show(position: Vector3, normal: Vector3) {
         this.material.albedoTexture = TEXTURES[Math.floor(Math.random() * (TEXTURES.length - 1))]
         this.transform.position = position;
-        this.transform.lookAt(position.add(normal));
+        const randomAngle = Math.random() * 360;
+        let rotation = Quaternion.LookRotation(normal, Vector3.Up())
+        rotation.multiplyInPlace(Quaternion.RotationYawPitchRoll(0, 0, randomAngle));
+        this.transform.rotation = rotation;
         this.shape.visible = true;
         this.addComponentOrReplace(new utils.Delay(100, () => {
             this.shape.visible = false;

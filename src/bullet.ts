@@ -1,4 +1,5 @@
 import utils from "../node_modules/decentraland-ecs-utils/index"
+import { layerBullet, layerBulletBarrier } from "./collisions";
 
 const BULLET_SPEED: number = 10;
 const BULLET_GLTF = new GLTFShape("models/laserbullet.glb");
@@ -46,6 +47,9 @@ export class BulletManager {
         const bullet = new Bullet((b) => { this.onBulletDestroyed(b) });
         bullet.addComponent(new Transform({ scale: new Vector3(0.3, 0.3, 0.3) }));
         bullet.addComponent(BULLET_GLTF);
+        bullet.addComponent(new utils.TriggerComponent(new utils.TriggerSphereShape(0.2, Vector3.Zero()), layerBullet, layerBulletBarrier, ()=> {
+            bullet.destroy();
+        }));
         engine.addEntity(bullet);
 
         return bullet;
