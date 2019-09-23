@@ -3,11 +3,12 @@ import { ShootEffectManager } from "./shooteffect";
 import { BulletManager } from "./bullet";
 import { createCollisionMap } from "./collisions";
 import { UpdateSystem, UpdatableComponent } from "./utils/updateSystem";
-import { Alien } from "./alien";
 import { createAlienAIMap } from "./ai/aiTriggers";
 import { AlienSpawner } from "./alienSpawner";
+import { Turret } from "./turrets";
 
-export function loadGamePlay() {
+//loadGamePlay(turret_02, turret_02_2);
+export function loadGamePlay(turretRight: Entity, turretLeft: Entity) {
     const dome = new Entity();
     dome.addComponent(new GLTFShape("models/Domo.glb"));
     engine.addEntity(dome);
@@ -16,6 +17,9 @@ export function loadGamePlay() {
     createAlienAIMap();
 
     UpdateSystem.create(); //One system to rule 'em all.
+
+    new Turret(turretRight, 20);
+    new Turret(turretLeft, -20);
 
     const player = new Player();
     player.pickRifle();

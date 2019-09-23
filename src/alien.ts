@@ -39,7 +39,6 @@ export class Alien extends Entity {
     }
 
     public die() {
-        log("alien die")
         if (this.onDie != null) this.onDie();
         this.getComponent(utils.TriggerComponent).enabled = false;
         this.playAnimation(Alien.Animation.die);

@@ -9,7 +9,7 @@ const BULLET_GLTF = new GLTFShape("models/laserbullet.glb");
 const DEFAULT_COLLISION_LAYER = layerBulletBarrier;
 const SHOOT_SOUND = new AudioClip("sounds/laser_shoot.mp3");
 
-export enum ShootTargetType { Alien, Player };
+export enum ShootTargetType { Hostile, Player };
 
 export class BulletManager {
     private pool: Bullet[] = []
@@ -47,7 +47,7 @@ export class BulletManager {
         bullet.shoot(direction);
         const bulletTrigger = bullet.getComponent(utils.TriggerComponent); 
         switch (targetType){
-            case ShootTargetType.Alien:
+            case ShootTargetType.Hostile:
                     bulletTrigger.triggeredByLayer = DEFAULT_COLLISION_LAYER | layerAliens;
                     bulletTrigger.onCameraEnter = null;
                 break;

@@ -764,4 +764,4 @@ const transform_67 = new Transform({
 fence_End_01_4.addComponentOrReplace(transform_67)
 engine.addEntity(fence_End_01_4)
 
-loadGamePlay()
+loadGamePlay(turret_02, turret_02_2);

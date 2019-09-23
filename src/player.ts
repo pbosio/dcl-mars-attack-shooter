@@ -34,7 +34,7 @@ export class Player extends Entity {
             if (this.canShoot()) {
                 const shootSource = this.rifle.getBulletSourcePosition();
                 const shootDirection = this.rifle.getAimDirection();
-                BulletManager.instance.shoot(shootSource, shootDirection, ShootTargetType.Alien);
+                BulletManager.instance.shoot(shootSource, shootDirection, ShootTargetType.Hostile);
                 ShootEffectManager.instance.showEffect(shootSource, shootDirection);
             }
         });
