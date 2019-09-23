@@ -1,8 +1,9 @@
 import { Rifle } from "./rifle";
-import { BulletManager } from "./bullet";
+import { BulletManager, ShootTargetType } from "./bullet";
 import { ShootEffectManager } from "./shooteffect";
+import { UpdatableComponent } from "./utils/updateSystem";
 
-export class Player extends Entity implements ISystem {
+export class Player extends Entity {
 
     private rifle: Rifle = null;
     private hasRifle: boolean = false;
@@ -14,7 +15,8 @@ export class Player extends Entity implements ISystem {
     constructor() {
         super();
         engine.addEntity(this);
-        engine.addSystem(this);
+        this.addComponent(new UpdatableComponent((dt) => this.update(dt)));
+
         this.playerLastPosition = Camera.instance.position;
         this.isPlayerMoving = false;
 
@@ -32,7 +34,7 @@ export class Player extends Entity implements ISystem {
             if (this.canShoot()) {
                 const shootSource = this.rifle.getBulletSourcePosition();
                 const shootDirection = this.rifle.getAimDirection();
-                BulletManager.instance.shoot(shootSource, shootDirection);
+                BulletManager.instance.shoot(shootSource, shootDirection, ShootTargetType.Alien);
                 ShootEffectManager.instance.showEffect(shootSource, shootDirection);
             }
         });
@@ -47,6 +49,10 @@ export class Player extends Entity implements ISystem {
             this.hasRifle = true;
             this.rifle.setIdleState();
         }
+    }
+
+    public die() {
+        
     }
 
     public update(dt: number) {

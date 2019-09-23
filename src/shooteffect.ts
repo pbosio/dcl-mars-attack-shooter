@@ -1,4 +1,5 @@
 import utils from "../node_modules/decentraland-ecs-utils/index"
+import { Random } from "./utils/random"
 
 const TEXTURES = [
     new Texture("images/shooteffect/shooteffect1.png", { hasAlpha: true }),
@@ -66,7 +67,7 @@ class ShootEffect extends Entity {
     }
 
     show(position: Vector3, normal: Vector3) {
-        this.material.albedoTexture = TEXTURES[Math.floor(Math.random() * (TEXTURES.length - 1))]
+        this.material.albedoTexture = TEXTURES[Random.INT.max(TEXTURES.length - 1)]
         this.transform.position = position;
         const randomAngle = Math.random() * 360;
         let rotation = Quaternion.LookRotation(normal, Vector3.Up())

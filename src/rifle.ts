@@ -1,5 +1,10 @@
+import "./extensions/transformExtension";
+import "./extensions/entityExtension"
+
 import utils from "../node_modules/decentraland-ecs-utils/index"
-import { StateMachine } from "./stateMachine";
+
+import { StateMachine } from "./utils/stateMachine";
+import { UpdateSystem } from "./utils/updateSystem";
 
 enum RifleState { Hidden, IdleStart, Idle, AimmingStart, Aimming }
 
@@ -20,7 +25,7 @@ export class Rifle extends Entity {
         this.addComponent(new Transform());
 
         this.stateMachine = new StateMachine();
-        engine.addSystem(this.stateMachine);
+        UpdateSystem.addSystem(this.stateMachine);
 
         this.state = RifleState.Hidden;
     }

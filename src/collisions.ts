@@ -1,7 +1,9 @@
 import utils from "../node_modules/decentraland-ecs-utils/index"
 
 export const layerBulletBarrier = 1;
-export const layerBullet = 2;
+export const layerBullet = 1 << 1;
+export const layerAIDecisionTrigger = 1 << 2;
+export const layerAliens = 1 << 3;
 
 export function createCollisionMap() {
     createBulletStopper(new Vector3(3.45, 1, 0.34), new Vector3(2.57, 0.62, 3.02));
