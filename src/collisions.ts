@@ -21,10 +21,10 @@ export function createCollisionMap() {
     createBulletStopper(new Vector3(1.06, 0.88, 0.79), new Vector3(5.95, 4.28, 36.5));
     createBulletStopper(new Vector3(1.06, 0.88, 0.79), new Vector3(2.54, 4.28, 36.5));
 
-    //createPlayerStopper(new Vector3(32, 4, 1), new Vector3(16, 2.07, 23.07));
-    //createPlayerStopper(new Vector3(32, 4, 1), new Vector3(16, 2.07, 47.36));
-    //createPlayerStopper(new Vector3(1, 4, 25), new Vector3(31.27, 2.07, 35.27));
-    //createPlayerStopper(new Vector3(1, 4, 25), new Vector3(0.66, 2.07, 35.27));
+    createPlayerStopper(new Vector3(32, 4, 1), new Vector3(16, 2.07, 23.07));
+    createPlayerStopper(new Vector3(32, 4, 1), new Vector3(16, 2.07, 47.36));
+    createPlayerStopper(new Vector3(1, 4, 25), new Vector3(31.27, 2.07, 35.27));
+    createPlayerStopper(new Vector3(1, 4, 25), new Vector3(0.66, 2.07, 35.27));
 }
 
 function createBulletStopper(size: Vector3, position: Vector3, debug?: boolean) {

@@ -21,6 +21,11 @@ export class AIAlienController {
         UpdateSystem.addSystem(this.actionSequencer);
     }
 
+    public clear() {
+        this.actionSequencer.stop();
+        this.ordersQueue = []; 
+    }
+
     public receiveOrders(ordersSequence: ActionsSequenceSystem.SequenceBuilder) {
         if (this.canObeyOrders()) {
             this.actionSequencer.startSequence(ordersSequence);
@@ -39,8 +44,7 @@ export class AIAlienController {
     }
 
     private onAlienDie() {
-        this.actionSequencer.stop();
-        this.ordersQueue = [];
+        this.clear();
     }
 
 }

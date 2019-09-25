@@ -7,6 +7,7 @@ import { StateMachine } from "./utils/stateMachine";
 import { UpdateSystem } from "./utils/updateSystem";
 
 enum RifleState { Hidden, IdleStart, Idle, AimmingStart, Aimming }
+export const RIFLE_GLTF_SHAPE = new GLTFShape("models/rifle.glb");
 
 export class Rifle extends Entity {
 
@@ -18,7 +19,7 @@ export class Rifle extends Entity {
         super();
 
         this.rifleEntity = new Entity();
-        this.rifleEntity.addComponent(new GLTFShape("models/rifle.glb"));
+        this.rifleEntity.addComponent(RIFLE_GLTF_SHAPE);
         this.rifleEntity.addComponent(new Transform());
         this.rifleEntity.setParent(this);
 
@@ -28,6 +29,14 @@ export class Rifle extends Entity {
         UpdateSystem.addSystem(this.stateMachine);
 
         this.state = RifleState.Hidden;
+    }
+
+    public showRifle() {
+        this.rifleEntity.getComponent(GLTFShape).visible = true;
+    }
+
+    public hideRifle() {
+        this.rifleEntity.getComponent(GLTFShape).visible = false;
     }
 
     public setMoveState() {

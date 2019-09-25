@@ -2,11 +2,13 @@ import { Rifle } from "./rifle";
 import { BulletManager, ShootTargetType } from "./bullet";
 import { ShootEffectManager } from "./shooteffect";
 import { UpdatableComponent } from "./utils/updateSystem";
+import { Config } from "./config";
+import { GameManager } from "./gameManager";
 
 export class Player extends Entity {
 
     private rifle: Rifle = null;
-    private hasRifle: boolean = false;
+    private _hasRifle: boolean = false;
 
     private playerLastPosition: Vector3
 
@@ -21,12 +23,12 @@ export class Player extends Entity {
         this.isPlayerMoving = false;
 
         Input.instance.subscribe("BUTTON_DOWN", ActionButton.SECONDARY, false, () => {
-            if (this.hasRifle && this.rifle.canSetAimState()) {
+            if (this._hasRifle && this.rifle.canSetAimState()) {
                 this.rifle.setAimState();
             }
         });
         Input.instance.subscribe("BUTTON_UP", ActionButton.SECONDARY, false, () => {
-            if (this.hasRifle && this.rifle.canSetIdleState()) {
+            if (this._hasRifle && this.rifle.canSetIdleState()) {
                 this.rifle.setIdleState();
             }
         });
@@ -41,22 +43,36 @@ export class Player extends Entity {
     }
 
     public pickRifle() {
-        if (!this.hasRifle) {
+        if (!this._hasRifle) {
             if (this.rifle == null) {
                 this.rifle = new Rifle();
                 engine.addEntity(this.rifle);
             }
-            this.hasRifle = true;
+            this._hasRifle = true;
+            this.rifle.showRifle()
             this.rifle.setIdleState();
         }
     }
 
+    public hasRifle(): boolean {
+        return this._hasRifle;
+    }
+
+    public removeRifle() {
+        this._hasRifle = false;
+        this.rifle.hideRifle();
+    }
+
     public die() {
-        
+        if (!Config.DEBUG_GODMODE) {
+            if (GameManager.instance.isGameActive()) {
+                GameManager.instance.setBattleEnd();
+            }
+        }
     }
 
     public update(dt: number) {
-        if (this.hasRifle) {
+        if (this._hasRifle) {
             this.updateRifleRootPosition(dt);
         }
 
@@ -78,20 +94,20 @@ export class Player extends Entity {
     }
 
     private canShoot(): boolean {
-        if (this.hasRifle) {
+        if (this._hasRifle) {
             return this.rifle.canShoot();
         }
         return false;
     }
 
     private onPlayerMoveStart() {
-        if (this.hasRifle) {
+        if (this._hasRifle) {
             this.rifle.setMoveState();
         }
     }
 
     private onPlayerIdleStart() {
-        if (this.hasRifle) {
+        if (this._hasRifle) {
             this.rifle.setIdleState();
         }
     }

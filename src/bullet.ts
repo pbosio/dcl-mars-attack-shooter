@@ -3,8 +3,8 @@ import { layerBullet, layerBulletBarrier, layerAliens } from "./collisions";
 import { UpdateSystem } from "./utils/updateSystem";
 import { Alien } from "./alien";
 import { Player } from "./player";
+import { Config } from "./config";
 
-const BULLET_SPEED: number = 10;
 const BULLET_GLTF = new GLTFShape("models/laserbullet.glb");
 const DEFAULT_COLLISION_LAYER = layerBulletBarrier;
 const SHOOT_SOUND = new AudioClip("sounds/laser_shoot.mp3");
@@ -126,7 +126,7 @@ class BulletSystem implements ISystem {
 
         liveBullets.entities.forEach(bullet => {
             const bulletTransform = bullet.getComponent(Transform);
-            bulletTransform.position = bulletTransform.position.add(bullet.getComponent(BulletComponent).direction.scale(dt * BULLET_SPEED));
+            bulletTransform.position = bulletTransform.position.add(bullet.getComponent(BulletComponent).direction.scale(dt * Config.BULLET_SPEED));
         });
     }
 }

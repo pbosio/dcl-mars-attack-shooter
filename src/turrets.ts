@@ -1,4 +1,4 @@
-import "./extensions/entityExtension"
+import "./extensions/transformExtension"
 import utils from "../node_modules/decentraland-ecs-utils/index"
 import { layerTurretTrigger } from "./collisions";
 import { RotateTransformComponent } from "../node_modules/decentraland-ecs-utils/transform/component/rotate";
@@ -17,9 +17,7 @@ export class Turret {
 
         const trigger = new Entity();
         const triggerTransform = trigger.addComponent(new Transform({ position: new Vector3(0, 0, 20) }));
-        trigger.addComponent(new utils.TriggerComponent(new utils.TriggerBoxShape(new Vector3(0.5, 2, 15), Vector3.Zero()), layerTurretTrigger, null, null, null, () => {
-            this.shoot();
-        }));
+        trigger.addComponent(new utils.TriggerComponent(new utils.TriggerBoxShape(new Vector3(0.5, 2, 15), Vector3.Zero()), layerTurretTrigger));
         
         trigger.addComponent(new UpdatableComponent((dt) => {
             const turretTransform = turretEntity.getComponent(Transform);
@@ -30,6 +28,20 @@ export class Turret {
 
         this.triggerEntity = trigger;
         this.rotate(rotationAngle);
+        this.setActive(false);
+    }
+
+    public setActive(active: boolean){
+        if (active){
+            this.triggerEntity.getComponent(utils.TriggerComponent).onCameraEnter = ()=> this.onTriggerEnter();
+        }
+        else{
+            this.triggerEntity.getComponent(utils.TriggerComponent).onCameraEnter = null;
+        }
+    }
+
+    private onTriggerEnter() {
+        this.shoot();
     }
 
     private rotate(angle: number) {
@@ -66,11 +78,11 @@ export class Turret {
         const source1 = turretPosition.add(offsetForward).add(offsetUp).add(offsetRight);
         const source2 = turretPosition.add(offsetForward).add(offsetUp).subtract(offsetRight);
 
-        BulletManager.instance.shoot(source1, turretForward, ShootTargetType.Hostile);
+        BulletManager.instance.shoot(source1, turretForward, ShootTargetType.Player);
         ShootEffectManager.instance.showEffect(source1, turretForward);
         this.triggerEntity.addComponentOrReplace(new utils.Delay(500, () => {
             const turretForward = turretTransform.Forward();
-            BulletManager.instance.shoot(source2, turretForward, ShootTargetType.Hostile);
+            BulletManager.instance.shoot(source2, turretForward, ShootTargetType.Player);
             ShootEffectManager.instance.showEffect(source2, turretForward);
         }));
     }

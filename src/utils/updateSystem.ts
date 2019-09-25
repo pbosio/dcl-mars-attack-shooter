@@ -21,6 +21,13 @@ export class UpdateSystem implements ISystem {
         this.instance.systems.push(system);
     }
 
+    public static removeSystem(system: ISystem) {
+        const idx = this.instance.systems.indexOf(system);
+        if (idx >= 0) {
+            this.instance.systems.splice(idx, 1);
+        }
+    }
+
     private systems: ISystem[] = []
 
     private constructor() {

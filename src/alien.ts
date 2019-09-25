@@ -1,8 +1,9 @@
-import "./extensions/entityExtension"
+import "./extensions/transformExtension"
 import utils from "../node_modules/decentraland-ecs-utils/index"
 import { layerAliens } from "./collisions";
 import { ShootEffectManager } from "./shooteffect";
 import { BulletManager, ShootTargetType } from "./bullet";
+import { GameManager } from "./gameManager";
 
 const ALIEN_GLTF = new GLTFShape("models/Alien.glb");
 const SHOOT_SOURCE = new Vector3(0.2, 1.5, 1.65);
@@ -11,7 +12,7 @@ export class Alien extends Entity {
     public static readonly MOVE_SPEED = 5;
 
     private animator: Animator;
-    private currentAnimClip: AnimationState | null;
+    private currentAnimClip: AnimationState | null = null;
     private onDie: () => void;
 
     private onDieOnce: (() => void)[] = []
@@ -39,18 +40,31 @@ export class Alien extends Entity {
     }
 
     public die() {
+        GameManager.instance.setAlienKilled();
+        this.clear();
         if (this.onDie != null) this.onDie();
         this.getComponent(utils.TriggerComponent).enabled = false;
         this.playAnimation(Alien.Animation.die);
-        this.addComponent(new utils.ExpireIn(3000, ()=> {
-            for (let i=0; i< this.onDieOnce.length; i++){
+        this.addComponent(new utils.Delay(3000, () => {
+            for (let i = 0; i < this.onDieOnce.length; i++) {
                 this.onDieOnce[i]();
             }
             this.onDieOnce = [];
         }));
     }
 
-    public subscribeOnceToDie(onDie: ()=> void) {
+    public destroy() {
+        if (this.onDie != null) this.onDie();
+        for (let i = 0; i < this.onDieOnce.length; i++) {
+            this.onDieOnce[i]();
+        }
+        this.onDieOnce = [];
+        this.getComponent(utils.TriggerComponent).enabled = false;
+        if (this.hasComponent(utils.Delay)) this.removeComponent(utils.Delay);
+        this.clear();
+    }
+
+    public subscribeOnceToDie(onDie: () => void) {
         this.onDieOnce.push(onDie);
     }
 
@@ -59,10 +73,13 @@ export class Alien extends Entity {
     }
 
     public playAnimation(animation: Alien.Animation) {
+        const newClip = this.animator.getClip(animation);
+        if (this.currentAnimClip == newClip) return;
+
         if (this.currentAnimClip != null) {
             this.currentAnimClip.stop();
         }
-        this.currentAnimClip = this.animator.getClip(animation);
+        this.currentAnimClip = newClip;
         this.currentAnimClip.play();
     }
 
@@ -86,6 +103,12 @@ export class Alien extends Entity {
 
     public granade(position: Vector3) {
         this.shoot(position);
+    }
+
+    private clear() {
+        if (this.hasComponent(utils.MoveTransformComponent)) this.removeComponent(utils.MoveTransformComponent);
+        if (this.hasComponent(utils.FollowPathComponent)) this.removeComponent(utils.FollowPathComponent);
+        if (this.hasComponent(utils.RotateTransformComponent)) this.removeComponent(utils.RotateTransformComponent);
     }
 }
 
