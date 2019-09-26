@@ -29,7 +29,7 @@ export function loadGamePlay(turretRight: Entity, turretLeft: Entity) {
 
     ShootEffectManager.create();
     BulletManager.create(player);
-    //AlienSpawner.create();
+    AlienSpawner.create();
 
     const ambientAudioSource = new AudioSource(new AudioClip("sounds/environment.mp3"));
     ambientAudioSource.loop = true;
@@ -94,5 +94,4 @@ export function loadGamePlay(turretRight: Entity, turretLeft: Entity) {
             if (rifle.hasComponent(utils.Delay)) rifle.removeComponent(utils.Delay);
             message.value = "[KILLED "+GameManager.instance.getAlienKilled()+" ALIENS]";
         });
-    //GameManager.instance.setBattleStart();
 }

@@ -39,10 +39,18 @@ export class Rifle extends Entity {
         this.rifleEntity.getComponent(GLTFShape).visible = false;
     }
 
+    public isRifleVisible(): boolean {
+        return this.rifleEntity.getComponent(GLTFShape).visible;
+    }
+
+    public clear() {
+        this.stateMachine.clear();
+    }
+
     public setMoveState() {
         this.stateMachine.setState(new GenericState(
             () => {
-                this.rifleEntity.getComponent(GLTFShape).visible = false;
+                this.hideRifle();
                 this.state = RifleState.Hidden;
             }
         ));
@@ -55,7 +63,7 @@ export class Rifle extends Entity {
                 rifleTransform.rotation = Quaternion.Identity;
                 this.state = RifleState.IdleStart;
                 this.rifleEntity.addComponentOrReplace(new utils.Delay(200, () => {
-                    this.rifleEntity.getComponent(GLTFShape).visible = true;
+                    this.showRifle();
                     this.rifleEntity.addComponentOrReplace(new utils.MoveTransformComponent(rifleTransform.position, new Vector3(0.1, -0.09, 0), 0.5,
                         () => {
                             this.state = RifleState.Idle;
@@ -72,7 +80,7 @@ export class Rifle extends Entity {
                 rifleTransform.rotation = Quaternion.Euler(-3.156, 0.002, 0);
                 this.state = RifleState.AimmingStart;
                 this.rifleEntity.addComponentOrReplace(new utils.Delay(200, () => {
-                    this.rifleEntity.getComponent(GLTFShape).visible = true;
+                    this.showRifle();
                     this.rifleEntity.addComponentOrReplace(new utils.MoveTransformComponent(rifleTransform.position, new Vector3(-0.001002297, -0.0406114, -0.09021578), 0.2,
                         () => {
                             this.state = RifleState.Aimming;

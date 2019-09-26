@@ -20,6 +20,7 @@ export function createCollisionMap() {
     createBulletStopper(new Vector3(1.96, 0.88, 0.79), new Vector3(17.55, 4.47, 31.95));
     createBulletStopper(new Vector3(1.06, 0.88, 0.79), new Vector3(5.95, 4.28, 36.5));
     createBulletStopper(new Vector3(1.06, 0.88, 0.79), new Vector3(2.54, 4.28, 36.5));
+    createBulletStopper(new Vector3(3, 3, 1), new Vector3(15.66885, 5.59, 37.91));
 
     createPlayerStopper(new Vector3(32, 4, 1), new Vector3(16, 2.07, 23.07));
     createPlayerStopper(new Vector3(32, 4, 1), new Vector3(16, 2.07, 47.36));
@@ -37,8 +38,8 @@ function createBulletStopper(size: Vector3, position: Vector3, debug?: boolean) 
 function createPlayerStopper(size: Vector3, position: Vector3, debug?: boolean) {
     const collider = new Entity();
     const shape = new BoxShape();
-    shape.visible = debug? true: false;
+    shape.visible = debug ? true : false;
     collider.addComponent(shape);
     collider.addComponent(new Transform({ position: position, scale: size }));
-    engine.addEntity(collider);   
+    engine.addEntity(collider);
 }

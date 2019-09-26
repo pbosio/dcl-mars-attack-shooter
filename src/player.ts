@@ -61,6 +61,7 @@ export class Player extends Entity {
     public removeRifle() {
         this._hasRifle = false;
         this.rifle.hideRifle();
+        this.rifle.clear();
     }
 
     public die() {
@@ -83,6 +84,9 @@ export class Player extends Entity {
                 this.isPlayerMoving = true;
                 this.onPlayerMoveStart();
             }
+            if (this._hasRifle && this.rifle.isRifleVisible()) {
+                this.rifle.hideRifle();
+            }
         }
         else {
             if (this.isPlayerMoving) {
@@ -94,7 +98,7 @@ export class Player extends Entity {
     }
 
     private canShoot(): boolean {
-        if (this._hasRifle) {
+        if (this._hasRifle && this.rifle.isRifleVisible()) {
             return this.rifle.canShoot();
         }
         return false;
@@ -113,9 +117,9 @@ export class Player extends Entity {
     }
 
     private hasPlayerMoved(cameraPosition: Vector3): boolean {
-        return this.playerLastPosition.x !== cameraPosition.x
-            || this.playerLastPosition.y !== cameraPosition.y
-            || this.playerLastPosition.z !== cameraPosition.z
+        return this.playerLastPosition.x != cameraPosition.x
+            || this.playerLastPosition.y != cameraPosition.y
+            || this.playerLastPosition.z != cameraPosition.z
     }
 
     private updateRifleRootPosition(dt: number) {

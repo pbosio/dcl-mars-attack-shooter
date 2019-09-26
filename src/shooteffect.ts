@@ -23,6 +23,9 @@ export class ShootEffectManager {
     }
 
     private constructor() {
+        this.pool.push(new ShootEffect((e) => { this.onEffectDestroyed(e) }));
+        this.pool.push(new ShootEffect((e) => { this.onEffectDestroyed(e) }));
+        this.pool.push(new ShootEffect((e) => { this.onEffectDestroyed(e) }));
     }
 
     public showEffect(position: Vector3, normal: Vector3) {

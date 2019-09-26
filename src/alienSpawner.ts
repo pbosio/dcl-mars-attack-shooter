@@ -16,7 +16,7 @@ export class AlienSpawner extends Entity {
     }
 
     public static create() {
-        this.instance;
+        AlienSpawner.instance;
     }
 
     private alienControllers: AIAlienController[] = [];
@@ -29,7 +29,7 @@ export class AlienSpawner extends Entity {
 
     public stopSpawning() {
         this.removeComponent(utils.Interval);
-        for (let i = 0; i < this.alienControllers.length; i++){
+        for (let i = 0; i < this.alienControllers.length; i++) {
             this.alienControllers[i].getAlien().destroy();
             this.alienControllers[i].clear();
         }
@@ -37,7 +37,6 @@ export class AlienSpawner extends Entity {
 
     private constructor() {
         super();
-
         this.createAliens();
     }
 
@@ -46,9 +45,10 @@ export class AlienSpawner extends Entity {
             const alien = new Alien();
             this.alienControllers.push(new AIAlienController(alien));
             this.availableAliens.push(alien);
-            alien.getComponent(Transform).position = new Vector3(16,-5,16);
+            alien.getComponent(Transform).position = new Vector3(16, -5, 16);
             alien.getComponent(utils.TriggerComponent).enabled = false;
             alien.playAnimation(Alien.Animation.idle);
+            alien.name = "ALIEN" + i;
             engine.addEntity(alien);
         }
     }
@@ -62,7 +62,7 @@ export class AlienSpawner extends Entity {
             alien.playAnimation(Alien.Animation.idle);
             alien.subscribeOnceToDie(() => {
                 this.availableAliens.push(alien)
-                alien.getComponent(Transform).position = new Vector3(16,-5,16);
+                alien.getComponent(Transform).position = new Vector3(16, -5, 16);
             });
         }
     }

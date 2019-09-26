@@ -9,6 +9,10 @@ export class StateMachine implements ISystem {
         this.states = [{ state: state, started: false }];
     }
 
+    public clear() {
+        this.states = [];
+    }
+
     public update(dt: number) {
         if (this.states.length > 0) {
             const currentState = this.states[0];
