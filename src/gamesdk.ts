@@ -23,7 +23,9 @@ export function loadGamePlay(turretRight: Entity, turretLeft: Entity) {
 
     UpdateSystem.create(); //One system to rule 'em all.
 
-    const turrets: Turret[] = [new Turret(turretRight, 20), new Turret(turretLeft, -20)];
+    turretRight.getComponent(Transform).rotate(Vector3.Up(), -17);
+    turretLeft.getComponent(Transform).rotate(Vector3.Up(), 17);
+    const turrets: Turret[] = [new Turret(turretRight, 60), new Turret(turretLeft, -60)];
 
     const player = new Player();
 
@@ -51,7 +53,7 @@ export function loadGamePlay(turretRight: Entity, turretLeft: Entity) {
     rifle.addComponent(new OnClick(() => {
         GameManager.instance.setBattleStart();
         message.value = "[PRESS [F] FOR A BETTER AIM]";
-        rifle.addComponent(new utils.Delay(10000, ()=>{
+        rifle.addComponent(new utils.Delay(10000, () => {
             message.value = "";
         }));
     }));
@@ -68,6 +70,16 @@ export function loadGamePlay(turretRight: Entity, turretLeft: Entity) {
     message.positionY = "10%";
     message.value = "[PICK UP YOUR RIFLE AND ATTACK]";
     message.fontSize = 20;
+
+    const screenColor: Color4 = Color4.Red();
+    screenColor.a = 0.05;
+
+    const hitScreenEffect = new UIContainerRect(gameUI);
+    hitScreenEffect.width = "100%";
+    hitScreenEffect.height = "100%";
+    hitScreenEffect.color = screenColor;
+    hitScreenEffect.isPointerBlocker = false;
+    hitScreenEffect.visible = false;
 
     GameManager.create(
         () => {
@@ -92,6 +104,16 @@ export function loadGamePlay(turretRight: Entity, turretLeft: Entity) {
                 turret.setActive(false);
             });
             if (rifle.hasComponent(utils.Delay)) rifle.removeComponent(utils.Delay);
-            message.value = "[KILLED "+GameManager.instance.getAlienKilled()+" ALIENS]";
+            message.value = "[KILLED " + GameManager.instance.getAlienKilled() + " ALIENS]";
+
+            let screenEffectTime = 0;
+            hitScreenEffect.visible = true;
+            dome.addComponent(new UpdatableComponent((dt: number) => { //too lazy to create a new entity for this
+                screenEffectTime += dt;
+                if (screenEffectTime >= 0.4) {
+                    hitScreenEffect.visible = false;
+                    dome.removeComponent(UpdatableComponent);
+                }
+            }));
         });
 }
